@@ -9,10 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
@@ -61,18 +58,30 @@ fun Screen() {
                 derivedStateOf { gameState?.stashedMoney }
             }
 
+            Column() {
+                Text("123u7210")
+                Text("Hallo 123891")
+            }
+            Column() {
+                Text("123u7210")
+                Text("Hallo 123891")
+            }
+
+
             Column(
                 modifier = Modifier.fillMaxWidth()
                     .verticalScroll(rememberScrollState())
             ) {
                 Text(
-                    "Idle Game",
+                    "Crossaint",
                     style = MaterialTheme.typography.h1,
                 )
-                Spacer(modifier = Modifier.height(16.dp))
+                 Spacer(modifier = Modifier.height(16.dp))
 
                 Button(
-                    onClick = { viewModel.reset() }
+                    onClick = { viewModel.reset() },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Cyan)
+
                 ) {
                     Text("Reset Game")
                 }
