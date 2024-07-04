@@ -58,14 +58,8 @@ fun Screen() {
                 derivedStateOf { gameState?.stashedMoney }
             }
 
-            Column() {
-                Text("123u7210")
-                Text("Hallo 123891")
-            }
-            Column() {
-                Text("123u7210")
-                Text("Hallo 123891")
-            }
+
+
 
 
             Column(
@@ -80,7 +74,8 @@ fun Screen() {
 
                 Button(
                     onClick = { viewModel.reset() },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Cyan)
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red)
+
 
                 ) {
                     Text("Reset Game")
@@ -123,25 +118,36 @@ private fun Generator(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = modifier
             .padding(8.dp)
-            .background(Color.LightGray, RoundedCornerShape(8.dp))
+            .background(Color.Red, RoundedCornerShape(8.dp))
             .padding(8.dp)
     ) {
         Column {
-            Text("Generator ${gameJob.id}")
+            Text("Generator ${gameJob.id}" )
             Text("Level: ${gameJob.level.level}")
-            Text("Costs: ${gameJob.level.cost.toHumanReadableString()} Gelds")
+            Text(
+                "Costs: ${gameJob.level.cost.toHumanReadableString()} Gelds", color = Color.White)
             Text("Earns: ${gameJob.level.earn.toHumanReadableString()} Gelds")
             Text("Duration: ${gameJob.level.duration.inWholeSeconds} Seconds")
         }
         if (!alreadyBought) {
-            Button(onClick = onBuy) {
+            Button(
+                onClick = onBuy,
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Black,
+                    contentColor = Color.White)
+            ) {
                 Text("Buy")
             }
         } else {
             Text("Bought")
         }
-        Button(onClick = onUpgrade) {
-            Text("Upgrade")
+        Button(
+            onClick = onUpgrade,
+            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Black,
+                contentColor = Color.White)
+            ) {
+            Text ("Upgrade")
         }
     }
 }
+
+// Function( argumente ) { Inhalt }
