@@ -1,11 +1,6 @@
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -18,9 +13,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import idle_game.composeapp.generated.resources.Bild
+import idle_game.composeapp.generated.resources.Res
+import idle_game.composeapp.generated.resources.Samuraibackground
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import util.Gelds
 import util.toHumanReadableString
@@ -59,46 +64,83 @@ fun Screen() {
             }
 
 
+            Image(
+                painterResource(Res.drawable.Samuraibackground),
+                contentDescription = "A square",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
 
 
-
-            Column(
+            Row(
                 modifier = Modifier.fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
             ) {
-                Text(
-                    "Crossaint",
-                    style = MaterialTheme.typography.h1,
-                )
-                 Spacer(modifier = Modifier.height(16.dp))
-
-                Button(
-                    onClick = { viewModel.reset() },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red)
-
-
+                Column(
+                    modifier = Modifier.weight(1f)
+                        .verticalScroll(rememberScrollState())
                 ) {
-                    Text("Reset Game")
-                }
-
-                gameState?.let { state ->
                     Text(
-                        "Bank: ${currentMoney?.toHumanReadableString()} Gelds",
-                        style = MaterialTheme.typography.h4,
+                        "Samurai Legends",
+                        color = Color.White,
+                        style = MaterialTheme.typography.h1,
+                        fontStyle = FontStyle.Italic
                     )
+                    Spacer(modifier = Modifier.height(16.dp))
+
                     Button(
-                        onClick = { viewModel.clickMoney(state) }
+                        onClick = { viewModel.reset() },
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Black),
+
+
                     ) {
-                        Text("Click money")
+                        Text(
+                            "Reset Game",
+                            color = Color.White
+                        )
                     }
 
-                    state.availableJobs.forEach { availableJob ->
-                        Generator(
-                            gameJob = availableJob,
-                            alreadyBought = state.workers.any { it.jobId == availableJob.id },
-                            onBuy = { viewModel.addWorker(state, availableJob) },
-                            onUpgrade = { viewModel.upgradeJob(state, availableJob) }
+                    gameState?.let { state ->
+                        Text(
+                            " ${currentMoney?.toHumanReadableString()} Damage count",
+                            style = MaterialTheme.typography.h4,
+                            color = Color.White
                         )
+
+                        state.availableJobs.forEach { availableJob ->
+                            Generator(
+                                gameJob = availableJob,
+                                alreadyBought = state.workers.any { it.jobId == availableJob.id },
+                                onBuy = { viewModel.addWorker(state, availableJob) },
+                                onUpgrade = { viewModel.upgradeJob(state, availableJob) }
+                            )
+                        }
+                    }
+                }
+
+                Column(
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text("")
+                    gameState?.let { state ->
+                        Button(
+                            onClick = { viewModel.clickMoney(state) },
+                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+                            modifier = Modifier.offset(x = 400.dp, y = 200.dp)
+                        ) {
+                            Text(
+                                "Click Enemies",
+                                color = Color.White
+                            )
+
+                            // Hier Image
+                            Image(
+                                painterResource(Res.drawable.Bild),
+                                contentDescription = "Samurai enemy",
+                                modifier = Modifier.width(900.dp).height(700.dp),
+                            )
+
+
+                        }
                     }
                 }
             }
@@ -122,18 +164,21 @@ private fun Generator(
             .padding(8.dp)
     ) {
         Column {
-            Text("Generator ${gameJob.id}" )
+            Text("${gameJob.title}")
             Text("Level: ${gameJob.level.level}")
             Text(
-                "Costs: ${gameJob.level.cost.toHumanReadableString()} Gelds", color = Color.White)
-            Text("Earns: ${gameJob.level.earn.toHumanReadableString()} Gelds")
+                "Costs: ${gameJob.level.cost.toHumanReadableString()} Damage", color = Color.Black
+            )
+            Text("Earns: ${gameJob.level.earn.toHumanReadableString()} Damage")
             Text("Duration: ${gameJob.level.duration.inWholeSeconds} Seconds")
         }
         if (!alreadyBought) {
             Button(
                 onClick = onBuy,
-                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Black,
-                    contentColor = Color.White)
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color.Black,
+                    contentColor = Color.White
+                )
             ) {
                 Text("Buy")
             }
@@ -142,10 +187,32 @@ private fun Generator(
         }
         Button(
             onClick = onUpgrade,
-            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Black,
-                contentColor = Color.White)
-            ) {
-            Text ("Upgrade")
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color.Black,
+                contentColor = Color.White
+            )
+        ) {
+            Text("Upgrade")
+            @Composable
+            fun MinimalDialog(onDismissRequest: () -> Unit) {
+                Dialog(onDismissRequest = { onDismissRequest() }) {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                            .padding(16.dp),
+                        shape = RoundedCornerShape(16.dp),
+                    ) {
+                        Text(
+                            text = "Click the opponents to gain damage, with damage you can buy and upgradenew weapons",
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .wrapContentSize(Alignment.Center),
+                            textAlign = TextAlign.Center,
+                        )
+                    }
+                }
+            }
         }
     }
 }
