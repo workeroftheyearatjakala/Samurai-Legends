@@ -125,12 +125,9 @@ fun Screen() {
                         Button(
                             onClick = { viewModel.clickMoney(state) },
                             colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
-                            modifier = Modifier.offset(x = 400.dp, y = 200.dp)
+                            modifier = Modifier.offset(x = 40.dp, y = 60.dp)
                         ) {
-                            Text(
-                                "Click Enemies",
-                                color = Color.White
-                            )
+
 
                             // Hier Image
                             Image(
